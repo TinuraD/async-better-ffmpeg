@@ -4,7 +4,8 @@
 [![PyPI downloads](https://img.shields.io/pypi/dw/better-ffmpeg-progress?label=PyPI&color=blue)](https://pypistats.org/packages/pypistats)
 [![GitHub](https://img.shields.io/github/license/crypticsignal/better-ffmpeg-progress?label=License&color=blue)](LICENSE.txt)
 
-# Better FFmpeg Progress
+# Better FFmpeg Async
+## Asynchronous fork of [Better FFmpeg Progress](https://github.com/CrypticSignal/better-ffmpeg-progress)
 
 Runs an FFmpeg command and uses [tqdm](https://github.com/tqdm/tqdm) to show a progress bar.
 
@@ -36,7 +37,7 @@ Create an instance of the `FfmpegProcess` class and supply a list of arguments l
  Example:
 
 ```py
-from better_ffmpeg_progress import FfmpegProcessAsync
+from better_ffmpeg_async import FfmpegProcessAsync
 
 async def handle_progress_info(percentage, speed, eta, estimated_filesize):
     print(f"Estimated Output Filesize: {estimated_filesize / 1_000_000} MB")
