@@ -1,24 +1,12 @@
-import setuptools
+from setuptools import setup
 
-with open("README.md", "r", encoding="utf-8") as f:
-    long_description = f.read()
-
-setuptools.setup(
+setup(
     name="better-ffmpeg-async",
-    version="2.1.1",
-    author="GitHub.com/CrypticSignal",
-    author_email="theaudiophile@outlook.com",
-    description="Run FFmpeg & see percentage progress + ETA.",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/TinuraD/better-ffmpeg-async",
-    packages=["better_ffmpeg_progress"],
-    install_requires=["ffmpeg-python", "tqdm", "asyncio"],
-    python_requires=">=3.6",
-    keywords=["ffmpeg", "progress"],
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
+    version="1.0",
+    packages=["better-ffmpeg-async"],
+    install_requires=[
+        "ffmpeg-python",
+        "tqdm",
+        "asyncio",
     ],
 )
