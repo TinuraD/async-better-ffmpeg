@@ -36,7 +36,7 @@ Create an instance of the `FfmpegProcess` class and supply a list of arguments l
 ```py
 from better_ffmpeg_async import FfmpegProcessAsync
 
-async def handle_progress_info(percentage, speed, eta, estimated_filesize):
+def handle_progress_info(percentage, speed, eta, estimated_filesize):
     print(f"Estimated Output Filesize: {estimated_filesize / 1_000_000} MB")
 
 # Pass a list of FFmpeg arguments, like you would if using subprocess.run()
