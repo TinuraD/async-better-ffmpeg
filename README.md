@@ -1,6 +1,7 @@
 # Better FFmpeg Async
 ## Asynchronous fork of [Better FFmpeg Progress](https://github.com/CrypticSignal/better-ffmpeg-progress)
 
+Note : This is not a completed project yet.
 Runs an FFmpeg command and uses [tqdm](https://github.com/tqdm/tqdm) to show a progress bar.
 
 </div>
