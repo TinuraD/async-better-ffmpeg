@@ -23,7 +23,9 @@ Where:
 
 ## Installation:
 
-```pip3 install git+https://github.com/TinuraD/better-ffmpeg-async.git```
+```
+pip3 install git+https://github.com/TinuraD/better-ffmpeg-async.git
+```
 
 ## Usage:
 
