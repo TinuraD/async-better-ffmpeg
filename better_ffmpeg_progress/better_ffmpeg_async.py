@@ -34,7 +34,7 @@ from ffmpeg import probe
 from tqdm import tqdm
 import asyncio
 
-class FfmpegProcess:
+class FfmpegProcessAsync:
     def __init__(self, command, ffmpeg_loglevel="verbose"):
         if "-i" not in command:
             raise ValueError("FFmpeg command must include '-i'")
