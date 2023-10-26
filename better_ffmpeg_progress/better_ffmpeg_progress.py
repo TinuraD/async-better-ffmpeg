@@ -1,29 +1,47 @@
+# This was originally made by : CrypticSignal
+# Modified by : Tinura Dinith
+
+"""
+MIT License
+
+Copyright (c) 2021 GitHub.com/CrypticSignal
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+
+
 import os
-from pathlib import Path
 import subprocess
 import sys
-
+from pathlib import Path
 from ffmpeg import probe
 from tqdm import tqdm
-
+import asyncio
 
 class FfmpegProcess:
-    """
-    Args:
-        command (list): A list of arguments to pass to FFmpeg.
-
-        ffmpeg_loglevel (str, optional): Desired FFmpeg log level. Default is "verbose".
-
-    Raises:
-        ValueError: If the list of arguments does not include "-i".
-    """
-
     def __init__(self, command, ffmpeg_loglevel="verbose"):
         if "-i" not in command:
             raise ValueError("FFmpeg command must include '-i'")
 
         self._ffmpeg_args = command + ["-hide_banner", "-loglevel", ffmpeg_loglevel]
         self._output_filepath = command[-1]
+        self._ffmpeg_output_file = None
 
         self._set_file_info()
 
@@ -67,7 +85,7 @@ class FfmpegProcess:
 
             self._ffmpeg_args.insert(1, "-y")
 
-    def _update_progress(self, ffmpeg_output, progress_handler):
+    async def _update_progress(self, ffmpeg_output, progress_handler):
         if ffmpeg_output:
             value = ffmpeg_output.split("=")[1].strip()
 
@@ -114,7 +132,7 @@ class FfmpegProcess:
                     self._percentage_progress, self._speed, self._eta, self._estimated_size
                 )
 
-    def run(
+    async def run(
         self,
         progress_handler=None,
         ffmpeg_output_file=None,
@@ -125,10 +143,15 @@ class FfmpegProcess:
 
         if ffmpeg_output_file is None:
             os.makedirs("ffmpeg_output", exist_ok=True)
-            ffmpeg_output_file = os.path.join("ffmpeg_output", f"[{Path(self._filepath).name}].txt")
+            self._ffmpeg_output_file = os.path.join("ffmpeg_output", f"[{Path(self._filepath).name}].txt")
 
-        with open(ffmpeg_output_file, "a") as f:
-            process = subprocess.Popen(self._ffmpeg_args, stdout=subprocess.PIPE, stderr=f)
+        with open(self._ffmpeg_output_file, "a") as f:
+            process = await asyncio.create_subprocess_exec(
+                *self._ffmpeg_args,
+                stdout=subprocess.PIPE,
+                stderr=f,
+                stdin=asyncio.subprocess.DEVNULL,
+            )
             print(f"\nRunning: {' '.join(self._ffmpeg_args)}\n")
 
         if progress_handler is None and self._can_get_duration:
@@ -140,9 +163,14 @@ class FfmpegProcess:
             )
 
         try:
-            while process.poll() is None:
-                ffmpeg_output = process.stdout.readline().decode().strip()
-                self._update_progress(ffmpeg_output, progress_handler)
+            while True:
+                ffmpeg_output = (await process.stdout.readline()).decode().strip()
+                if not ffmpeg_output:
+                    break
+
+                await self._update_progress(ffmpeg_output, progress_handler)
+
+            await process.communicate()
 
             if process.returncode != 0:
                 if error_handler:
@@ -150,13 +178,13 @@ class FfmpegProcess:
                     return
 
                 print(
-                    f"The FFmpeg process encountered an error. The output of FFmpeg can be found in {ffmpeg_output_file}"
+                    f"The FFmpeg process encountered an error. The output of FFmpeg can be found in {self._ffmpeg_output_file}"
                 )
 
             if success_handler:
                 success_handler()
 
-            print(f"\n\nDone! To see FFmpeg's output, check out {ffmpeg_output_file}")
+            print(f"\n\nDone! To see FFmpeg's output, check out {self._ffmpeg_output_file}")
             sys.exit()
 
         except KeyboardInterrupt:
@@ -166,3 +194,5 @@ class FfmpegProcess:
         except Exception as e:
             print(f"[Error] {e}\nExiting Better FFmpeg Progress.")
             sys.exit()
+
+
