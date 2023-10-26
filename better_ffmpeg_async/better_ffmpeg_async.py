@@ -75,14 +75,7 @@ class FfmpegProcessAsync:
         self._dir_files = (
             [file for file in os.listdir(dirname)] if dirname else [file for file in os.listdir()]
         )
-
         if "-y" not in self._ffmpeg_args and self._output_filepath in self._dir_files:
-            choice = input(f"{self._output_filepath} already exists. Overwrite? [Y/N]: ").lower()
-
-            if choice != "y":
-                print("Exiting Better FFmpeg Process.")
-                sys.exit()
-
             self._ffmpeg_args.insert(1, "-y")
 
     async def _update_progress(self, ffmpeg_output, progress_handler):
@@ -185,14 +178,11 @@ class FfmpegProcessAsync:
                 success_handler()
 
             print(f"\n\nDone! To see FFmpeg's output, check out {self._ffmpeg_output_file}")
-            sys.exit()
 
         except KeyboardInterrupt:
             print("[KeyboardInterrupt] FFmpeg process killed. Exiting Better FFmpeg Progress.")
             sys.exit()
 
         except Exception as e:
-            print(f"[Error] {e}\nExiting Better FFmpeg Progress.")
-            sys.exit()
-
+            print(f"[Error] {e}\nError occured.")
 
