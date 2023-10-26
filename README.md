@@ -27,7 +27,7 @@ Where:
 
 ## Installation:
 
-`pip3 install better-ffmpeg-progress --upgrade`
+`pip3 install git+https://github.com/TinuraD/better-ffmpeg-async.git`
 
 ## Usage:
 
