@@ -1,1 +1,1 @@
-from .better_ffmpeg_async import FfmpegProcess
+from .better_ffmpeg_async import FfmpegProcessAsync
