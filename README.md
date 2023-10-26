@@ -1,9 +1,3 @@
-<div align="center">
-
-[![PyPI downloads](https://img.shields.io/pypi/dm/better-ffmpeg-progress?label=PyPI&color=blue)](https://pypistats.org/packages/pypistats)
-[![PyPI downloads](https://img.shields.io/pypi/dw/better-ffmpeg-progress?label=PyPI&color=blue)](https://pypistats.org/packages/pypistats)
-[![GitHub](https://img.shields.io/github/license/crypticsignal/better-ffmpeg-progress?label=License&color=blue)](LICENSE.txt)
-
 # Better FFmpeg Async
 ## Asynchronous fork of [Better FFmpeg Progress](https://github.com/CrypticSignal/better-ffmpeg-progress)
 
