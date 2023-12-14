@@ -3,7 +3,7 @@
 Runs an FFmpeg command and uses [tqdm](https://github.com/tqdm/tqdm) to show a progress bar.<br/>
 
 ## Note ⚠️
-- This is originally based on [CrypticSignal's better-ffmpeg-progress](https://github.com/CrypticSignal/better-ffmpeg-progress). The only difference is, this is asynchronous. (Also unifinished project)
+- This is originally based on [CrypticSignal's better-ffmpeg-progress](https://github.com/CrypticSignal/better-ffmpeg-progress). The only difference is, this is asynchronous. (Also unfinished project)
 
 
 </div>
